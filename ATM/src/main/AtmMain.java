@@ -1,4 +1,4 @@
-//mod atm
+//mod atm - second try
 package main;
 
 import java.util.Scanner;
