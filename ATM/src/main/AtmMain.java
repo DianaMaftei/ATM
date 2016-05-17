@@ -1,9 +1,4 @@
-<<<<<<< HEAD
 //mod atm
-=======
-//modificat
-
->>>>>>> refs/remotes/origin/master
 package main;
 
 import java.util.Scanner;
