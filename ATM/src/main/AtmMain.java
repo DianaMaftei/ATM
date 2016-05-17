@@ -1,4 +1,4 @@
-//check mods
+//mod atm
 package main;
 
 import java.util.Scanner;
