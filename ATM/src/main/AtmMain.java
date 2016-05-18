@@ -15,31 +15,23 @@ public class AtmMain {
 	static final String COD_PASS = "INVALID_PASS";
 	static final String COD_FREEZE = "FREEZE";
 	static final String COD_FROZEN = "FROZEN";
-	static final int MAX_RETRIES = 3; // how many times the user can try to
-										// login before his account gets frozen
+	static final int MAX_RETRIES = 3; // how many times the user can try to login
 
-	static int position = 0;
-
-	static boolean loggedIn = false;
-
-	static boolean shutDown = false;
+	static int indexUserInList = 0; // the position of the logged in account
+	static boolean loggedIn = false; // was the login successful?
+	static boolean shutDown = false; // has the ATM been shut down?
 
 	static String user;
 	static String pass;
-	static double userBalance;
 
 	static Scanner input = new Scanner(System.in);
 
 	public static void main(String[] args) {
 
 		while (!shutDown) {
-
 			doLogin();
 			atmCommands();
 		}
-		// nu vrea sa continue, show menu for new user; else - show menu again
-		// else -> try again - > start from prezinta optiune autentificare
-
 	}
 
 	// get the password and username from client
@@ -60,7 +52,6 @@ public class AtmMain {
 			feedbackToUser(result);
 
 			if (COD_SUCCESS.equals(result)) {
-				userBalance = balanceList[position];
 				loggedIn = true;
 				return;
 			}
@@ -78,13 +69,13 @@ public class AtmMain {
 	public static String checkLoginData(String user, String pass) {
 		for (int i = 0; i < userList.length; i++) {
 			if (userList[i].equals(user)) {
+				// store the position in the list where the user was
+				// found
+				indexUserInList = i;
 				if (passwordList[i].equals(pass)) {
 					if (activeAccountsList[i] == false) {
 						return COD_FROZEN;
 					} else {
-						// store the position in the list where the user was
-						// found
-						position = i;
 						return COD_SUCCESS;
 					}
 				} else {
@@ -103,19 +94,19 @@ public class AtmMain {
 			break;
 
 		case COD_PASS:
-			System.out.println("Incorrect password, please try again.");
+			System.err.println("Incorrect password, please try again.");
 			break;
 
 		case COD_USER:
-			System.out.println("Invalid user, please try again.");
+			System.err.println("Invalid user, please try again.");
 			break;
 
 		case COD_FREEZE:
-			System.out.println("You have reached your maximum number of tries, your account has been frozen.");
+			System.err.println("You have reached your maximum number of tries, your account has been frozen.");
 			break;
 
 		case COD_FROZEN:
-			System.out.println("Your account is frozen, contact your local bank.");
+			System.err.println("Your account is frozen, contact your local bank.");
 			break;
 
 		default:
@@ -126,43 +117,52 @@ public class AtmMain {
 
 	// bonus - freeze account if pass incorrect more than 3 times
 	public static void freezeAccount() {
-		activeAccountsList[position] = false;
+		activeAccountsList[indexUserInList] = false;
 	}
 
 	// display account options
 	// 5th option (exit) available if "admin" user is logged in
 	public static void displayOptionsMenu() {
-		System.out.println("Choose what you want to do. Type the corresponding number: ");
+		System.out.println("Choose what you want to do. Type the corresponding letter: ");
 		System.out.printf("\t (1) Check balance.\n");
 		System.out.printf("\t (2) Deposit money.\n");
 		System.out.printf("\t (3) Withdraw money.\n");
 		System.out.printf("\t (4) Change password.\n");
 		if (user.equals("admin")) {
 			System.out.printf("\t (5) Shut down machine for maintenance.\n");
+			System.out.printf("\t (6) Add new user.\n");
+			System.out.printf("\t (7) Make an inactive account active.\n");
 		}
 	}
 
 	// perform commands based on the user inputed option
 	// run method based on user option
 	public static void optionsMenu() {
-		int optionUser = input.nextInt();
+		String optionUser = input.next().toUpperCase();
 		switch (optionUser) {
-		case 1:
+		case "1":
 			checkBalance();
 			break;
-		case 2:
+		case "2":
 			depositMoney();
 			break;
-		case 3:
+		case "3":
 			withdrawMoney();
 			break;
-		case 4:
+		case "4":
 			changePassWord();
 			break;
-		case 5:
+		case "5":
 			exit();
 			break;
+		case "6":
+			addUser();
+			break;
+		case "7":
+			makeActive();
+			break;
 		default:
+			System.out.println("Please type a valid command.");
 			break;
 		}
 	}
@@ -170,7 +170,7 @@ public class AtmMain {
 	// check the amount of money in the account
 	// check how much money is in the account
 	public static void checkBalance() {
-		System.out.printf("Your balance is: %.2f.\n", balanceList[position]);
+		System.out.printf("Your balance is: %.2f.\n", balanceList[indexUserInList]);
 	}
 
 	// withdraw an amount of money from the accout
@@ -179,10 +179,10 @@ public class AtmMain {
 		System.out.println("How much money do you want to withdraw?");
 		double sumToWithdraw = input.nextDouble();
 		if (sumToWithdraw > 0) { // check if the sum is not negative
-			if ((userBalance - sumToWithdraw) > 0) {
-				userBalance -= sumToWithdraw;
+			if ((balanceList[indexUserInList] - sumToWithdraw) > 0) {
+				balanceList[indexUserInList] -= sumToWithdraw;
 				System.out.printf("You have withdrawn %.2f. Your current balance is %.2f.\n", sumToWithdraw,
-						userBalance);
+						balanceList[indexUserInList]);
 			} else {
 				System.out.println("The sum you are trying to withdraw is larger than your current balance.");
 			}
@@ -197,8 +197,9 @@ public class AtmMain {
 		System.out.println("How much money do you want to deposit?");
 		double sumToDeposit = input.nextDouble();
 		if (sumToDeposit > 0) { // check if the sum is not negative
-			userBalance += sumToDeposit;
-			System.out.printf("You have deposited %.2f. Your current balance is %.2f.\n", sumToDeposit, userBalance);
+			balanceList[indexUserInList] += sumToDeposit;
+			System.out.printf("You have deposited %.2f. Your current balance is %.2f.\n", sumToDeposit,
+					balanceList[indexUserInList]);
 		} else {
 			System.out.println("The sum you are trying to deposit is not valid. Please try again.");
 		}
@@ -210,15 +211,19 @@ public class AtmMain {
 		System.out.println("Type your current password.");
 		String oldPassword = input.next();
 		// if current password is valid
-		if (oldPassword.equals(passwordList[position])) {
+		if (oldPassword.equals(passwordList[indexUserInList])) {
 			System.out.println("Type your new password.");
 			String newPassword1 = input.next();
 			System.out.println("Type new password again.");
 			String newPassword2 = input.next();
 			if (newPassword1.equals(newPassword2)) {
-				passwordList[position] = newPassword2;
+				passwordList[indexUserInList] = newPassword2;
 				System.out.println("Your password has been saved.");
+			} else {
+				System.out.println("The two passwords do not match. Please try again.");
 			}
+		} else {
+			System.out.println("The password you have typed is invalid.");
 		}
 	}
 
@@ -239,10 +244,14 @@ public class AtmMain {
 			do {
 				displayOptionsMenu();
 				optionsMenu();
+
 				if (!shutDown) {
-					System.out.println("Do you want to continue? Type \"Y\"  for yes or \"N\" for no.");
-					nextCommand = input.next().toUpperCase();
-					if(nextCommand.toUpperCase().equals("N")){
+					do {
+						System.out.println("Do you want to continue? Type \"Y\"  for yes or \"N\" for no.");
+						nextCommand = input.next().toUpperCase();
+					} while (!"YN".contains(nextCommand));
+					if (nextCommand.toUpperCase().equals("N")) {
+						System.out.println("Have a good day!");
 						loggedIn = false;
 					}
 				}
@@ -251,7 +260,17 @@ public class AtmMain {
 		}
 	}
 
-	// extras de cont bonus
+	// extras de cont - bonus
 	// admin can unlock - bonus
+	// admin can add account - bonus
+	public static void addUser(){
+		
+	}
+	
+	public static void makeActive(){
+		System.out.println("Type the name of the account you want to make active.");
+		String account = input.next();
+		
+	}
 
 }
