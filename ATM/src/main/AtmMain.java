@@ -1,4 +1,4 @@
-//18.05.2016 - class
+//18.05.2016 - home
 package main;
 
 import java.util.Scanner;
@@ -9,7 +9,7 @@ public class AtmMain {
 	static String[] oldPasswordList = { "ad", "dia", "th", "jo", "ch", "tiha", "hannah123" };
 	static double[] oldBalanceList = { 0, 100.00, 4324.34, 6547.76, 30000.00, 2400.57, 1500.10 };
 	static boolean[] oldActiveAccountsList = { true, true, false, true, false, true, true };
-	
+
 	static final String COD_SUCCESS = "SUCCESS";
 	static final String COD_USER = "WRONG_USER";
 	static final String COD_PASS = "INVALID_PASS";
@@ -84,7 +84,7 @@ public class AtmMain {
 
 	public static boolean checkUser(String user) {
 		for (int i = 0; i < oldUserList.length; i++) {
-			if (oldUserList[i].equals(user)) {
+			if (oldUserList[i].equalsIgnoreCase(user)) {
 				// store the position in the list where the user was
 				// found
 				indexUserInList = i;
@@ -136,7 +136,7 @@ public class AtmMain {
 		System.out.println("\t (2) Deposit money.\n");
 		System.out.println("\t (3) Withdraw money.\n");
 		System.out.println("\t (4) Change password.\n");
-		if (user.equals("admin")) {
+		if (user.equalsIgnoreCase("admin")) {
 			System.out.println("\t (5) Shut down machine for maintenance.\n");
 			System.out.println("\t (6) Add new user.\n");
 			System.out.println("\t (7) Make an inactive account active.\n");
@@ -186,6 +186,8 @@ public class AtmMain {
 	public static void withdrawMoney() {
 		System.out.println("How much money do you want to withdraw?");
 		double sumToWithdraw = input.nextDouble();
+		//TODO check if user types anything else
+		//TODO store transactions
 		if (sumToWithdraw > 0) { // check if the sum is not negative
 			if ((oldBalanceList[indexUserInList] - sumToWithdraw) > 0) {
 				oldBalanceList[indexUserInList] -= sumToWithdraw;
@@ -204,6 +206,8 @@ public class AtmMain {
 	public static void depositMoney() {
 		System.out.println("How much money do you want to deposit?");
 		double sumToDeposit = input.nextDouble();
+		//TODO check if user types anything else
+		//TODO store transactions
 		if (sumToDeposit > 0) { // check if the sum is not negative
 			oldBalanceList[indexUserInList] += sumToDeposit;
 			System.out.printf("You have deposited %.2f. Your current balance is %.2f.\n", sumToDeposit,
@@ -220,6 +224,7 @@ public class AtmMain {
 		String oldPassword = input.next();
 		// if current password is valid
 		if (oldPassword.equals(oldPasswordList[indexUserInList])) {
+			//TODO make valid only 4 digit pass
 			System.out.println("Type your new password.");
 			String newPassword1 = input.next();
 			System.out.println("Type new password again.");
@@ -236,9 +241,10 @@ public class AtmMain {
 	}
 
 	// shut down the ATM for maintenance
+	// shut down the ATM for maintenance
 	// exit - admin - maintenence - CHECK WHAT USER IS LOGGED IN
 	public static void exit() {
-		if (user.equals("admin")) {
+		if (user.equalsIgnoreCase("admin")) {
 			System.out.println("ATM is shutting down.");
 			shutDown = true;
 		} else {
@@ -256,39 +262,43 @@ public class AtmMain {
 				if (!shutDown) {
 					do {
 						System.out.println("Do you want to continue? Type \"Y\"  for yes or \"N\" for no.");
-						nextCommand = input.next().toUpperCase();
+						nextCommand = input.next();
 					} while (!"YN".contains(nextCommand));
-					if (nextCommand.toUpperCase().equals("N")) {
+					if (nextCommand.equalsIgnoreCase("N")) {
 						System.out.println("Have a good day!");
 						loggedIn = false;
 					}
 				}
 
-			} while (nextCommand.equals("Y"));
+			} while (nextCommand.equalsIgnoreCase("Y"));
 		}
 	}
 
 	// extras de cont - bonus
-	
+
 	// admin can add account - bonus
 	public static void addUser() {
-
+		// TODO add new users to list
 	}
 
 	// admin can unfreeze an account - bonus
 	public static void makeActive() {
 		System.out.println("Type the name of the account you want to make active.");
 		String account = input.next();
-		if(checkUser(account)){
-			if(oldActiveAccountsList[indexUserInList]){
+		if (checkUser(account)) {
+			if (oldActiveAccountsList[indexUserInList]) {
 				System.out.println("The account is already active.");
-			}else{
+			} else {
 				oldActiveAccountsList[indexUserInList] = true;
 				System.out.printf("The account %s is now active!\n", user);
 			}
-		}else{
+		} else {
 			System.out.println("The account name is not valid.");
 		}
 	}
-
+	
+	//tranzactions
+	public static void getUserTransactions(){
+		//TODO array of arrays where transaztions are stored
+	}
 }
