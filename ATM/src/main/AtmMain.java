@@ -17,8 +17,8 @@ public class AtmMain {
 	static final String COD_PASS = "INVALID_PASS";
 	static final String COD_FREEZE = "FREEZE";
 	static final String COD_FROZEN = "FROZEN";
-	static final int MAX_RETRIES = 3; // how many times the user can try to
-										// login
+	static int maxTries; // how many times the user can try to
+							// login
 
 	static int indexUserInList = 0; // the position of the logged in account
 	static boolean isUserLoggedIn = false; // was the login successful?
@@ -30,7 +30,13 @@ public class AtmMain {
 	static Scanner input = new Scanner(System.in);
 
 	public static void main(String[] args) {
-
+		if (args.length == 0) {
+			System.out.println("Read the documentation!");
+			return;
+		} 
+		
+		maxTries = Integer.parseInt(args[0]);
+		
 		while (!isAtmTurnedOff) {
 			doLogin();
 			runAtmCommands();
@@ -46,7 +52,7 @@ public class AtmMain {
 	// try to login based on the user and password given,
 	public static void doLogin() {
 		// check user and password for a total of MAX tries
-		for (int i = MAX_RETRIES; i > 0; i--) {
+		for (int i = maxTries; i > 0; i--) {
 			System.out.printf("Enter your username and password! You've got %d more tries!\n", i);
 			readUserAndPass();
 			String result = checkLoginData(user, pass);
