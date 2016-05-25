@@ -18,7 +18,16 @@ public class ExercisesMain {
 		//////////////////////////////////////////////////////////////////////////////////
 		
 		
-		Carte fave = new Carte("HHGTTG", "Douglas Adams", "no idea", 800);		
+		Carte fave = new Carte("HHGTTG", "Douglas Adams", "no idea", 800);	
+		Carte secondFave = new Carte("Sth", "someone", "Polirom", 300);
+		
+		System.out.println(Verificari.verificaDubluExemplar(fave, secondFave));
+		
+		Carte next = fave;
+		System.out.println(Verificari.verificaDubluExemplar(fave, next));
+		
+		System.out.println(Verificari.verificaGrosime(fave, secondFave));
+		
 	}
 
 }

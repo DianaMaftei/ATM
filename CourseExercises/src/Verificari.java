@@ -1,11 +1,17 @@
 
 public class Verificari {
-	public boolean verificaDubluExemplar(Carte carte1, Carte carte2){
-		return carte1.equals(carte2);
+	
+	
+	public static boolean verificaDubluExemplar(Carte carte1, Carte carte2){
+		return carte1 == carte2;
 	}
 	
-	public double verificaGrosime(Carte carte1, Carte carte2){
-		return Math.max(carte1.getNumarDePagini(), carte2.getNumarDePagini());
+	public static String verificaGrosime(Carte carte1, Carte carte2){
+		if (carte1.getNumarDePagini() >= carte2.getNumarDePagini()){
+			return carte1.getAutor();
+		}
+		return carte2.getAutor();
+		
 		
 	}
 }
