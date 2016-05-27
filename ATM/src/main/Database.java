@@ -9,8 +9,6 @@ public class Database {
 	public static void createUsersAtStartup(){
 		accounts.add(new Account("admin1", "1234", "admin"));
 		accounts.add(new Account("diana", "0000", "user"));
-		accounts.add(new Account("anca", "1111", "user"));
-		
-		
+		accounts.add(new Account("anca", "1111", "user"));		
 	}
 }

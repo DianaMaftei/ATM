@@ -5,11 +5,12 @@ import java.util.Scanner;
 
 public class AccountService {
 	
-	private static Scanner userInput = new Scanner(System.in);
-	private static Login localLogin = new Login();
+	private Scanner userInput = new Scanner(System.in);
 
-	public static void addNewUser() {
-		if ("admin".equals(Login.loggedIn.getAccountType())) {
+	private Login localLogin = new Login();
+
+	public void addNewUser() {
+		if ("admin".equals(localLogin.loggedIn.getAccountType())) {
 			System.out.println("Type a new account name:");
 			String newAccountName = userInput.next();
 			if (localLogin.checkIfUserExists(newAccountName) == null) {
@@ -25,11 +26,11 @@ public class AccountService {
 		}
 	}
 
-	public static void changePassWord() {
+	public void changePassWord() {
 		System.out.println("Type your current password.");
 		String oldPassword = userInput.next();
 		// if current password is valid
-		if (oldPassword.equals(Login.loggedIn.getPassword())) {
+		if (oldPassword.equals(localLogin.loggedIn.getPassword())) {
 			// make valid only 4 digit pass
 			System.out.println("Type a new 4 digit password.");
 			String newPassword1 = userInput.next();
@@ -37,7 +38,7 @@ public class AccountService {
 				System.out.println("Type the 4 digit password again.");
 				String newPassword2 = userInput.next();
 				if (newPassword1.equals(newPassword2)) {
-				Login.loggedIn.setPassword(newPassword2);
+					localLogin.loggedIn.setPassword(newPassword2);
 					System.out.println("Your password has been saved.");
 				} else {
 					System.out.println("The two passwords do not match. Please try again.\n");
@@ -48,8 +49,8 @@ public class AccountService {
 		}
 	}
 
-	public static void reactivateAccount() {
-		if ("admin".equals(Login.loggedIn.getAccountType())) {
+	public void reactivateAccount() {
+		if ("admin".equals(localLogin.loggedIn.getAccountType())) {
 			System.out.println("Type the name of the account you want to make active.");
 			String accountToMakeValid = userInput.next();
 			Account accountToReactivate = localLogin.checkIfUserExists(accountToMakeValid);
@@ -68,17 +69,17 @@ public class AccountService {
 		}
 	}
 
-	public static void freezeAccount(Account accountToFreeze) {
+	public void freezeAccount(Account accountToFreeze) {
 		// activeAccountsList[indexUserInList] = false;
 		accountToFreeze.setActiveAccount(false);
 	}
 
-	public static void checkBalance() {
-		System.out.printf("Your balance is: %.2f.\n", Login.loggedIn.getBalance());
+	public void checkBalance() {
+		System.out.printf("Your balance is: %.2f.\n", localLogin.loggedIn.getBalance());
 	}
 	
-	public static void withdrawMoney(){
-		if(Login.loggedIn.getBalance() <= 0.0){
+	public void withdrawMoney(){
+		if(localLogin.loggedIn.getBalance() <= 0.0){
 			System.out.println("You cannot withdraw money.");
 			return;
 		}
@@ -87,12 +88,12 @@ public class AccountService {
 			double sumToWithdraw = userInput.nextDouble();
 
 			if (sumToWithdraw > 0) { // check if the sum is not negative
-				if ((Login.loggedIn.getBalance() - sumToWithdraw) > 0) {
-					Login.loggedIn.setBalance(Login.loggedIn.getBalance() - sumToWithdraw);
+				if ((localLogin.loggedIn.getBalance() - sumToWithdraw) > 0) {
+					localLogin.loggedIn.setBalance(localLogin.loggedIn.getBalance() - sumToWithdraw);
 					System.out.printf("You have withdrawn %.2f. Your current balance is %.2f.\n", sumToWithdraw,
-							Login.loggedIn.getBalance());
+							localLogin.loggedIn.getBalance());
 					// store transactions
-					storeUserTransactions("Withdraw", sumToWithdraw, Login.loggedIn.getBalance());
+					storeUserTransactions("Withdraw", sumToWithdraw, localLogin.loggedIn.getBalance());
 
 				} else {
 					System.out.println("The sum you are trying to withdraw is larger than your current balance.\n");
@@ -107,16 +108,16 @@ public class AccountService {
 		
 	}
 	
-	public static void depositMoney(){
+	public void depositMoney(){
 		try {
 			System.out.println("How much money do you want to deposit?");
 			double sumToDeposit = userInput.nextDouble();
 			if (sumToDeposit > 0) { // check if the sum is not negative
-				Login.loggedIn.setBalance(Login.loggedIn.getBalance() + sumToDeposit);
+				localLogin.loggedIn.setBalance(localLogin.loggedIn.getBalance() + sumToDeposit);
 				System.out.printf("You have deposited %.2f. Your current balance is %.2f.\n", sumToDeposit,
-						Login.loggedIn.getBalance());
+						localLogin.loggedIn.getBalance());
 				// store transactions
-				storeUserTransactions("Deposit", sumToDeposit, Login.loggedIn.getBalance());
+				storeUserTransactions("Deposit", sumToDeposit, localLogin.loggedIn.getBalance());
 			} else {
 				System.out.println("The sum you are trying to deposit is not valid. Please try again.\n");
 			}
@@ -127,19 +128,19 @@ public class AccountService {
 
 	}
 	
-	public static void storeUserTransactions(String typeOfTransaction, double sumTransacted, double currentBalance){
+	public void storeUserTransactions(String typeOfTransaction, double sumTransacted, double currentBalance){
 		Transaction newTransaction = new Transaction(typeOfTransaction, sumTransacted, currentBalance);
-		Login.loggedIn.getTransactions().add(newTransaction);
+		localLogin.loggedIn.getTransactions().add(newTransaction);
 	}
 	
-	public static void getUserTransactions(){
-		for(Transaction trans : Login.loggedIn.getTransactions()){
+	public void getUserTransactions(){
+		for(Transaction trans : localLogin.loggedIn.getTransactions()){
 			System.out.println(trans.toString());
 		}
 	}
 	
-	public static void shutDownAtm() {
-		if ("admin".equals(Login.loggedIn.getAccountType())) {
+	public void shutDownAtm() {
+		if ("admin".equals(localLogin.loggedIn.getAccountType())) {
 			System.out.println("ATM is shutting down.");
 			AtmMain.isAtmTurnedOff = true;
 		} else {

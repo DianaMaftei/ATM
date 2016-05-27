@@ -9,14 +9,14 @@ public class Login {
 
 	static final int MAX_LOGIN_RETRIES = 3;
 
-	public static Account loggedIn;
-	public static Account tryingToLogIn;
-	private static String userNameRead;
-	private static String passwordRead;
-	private static Feedback userFeedback;
-	private static Scanner userInput = new Scanner(System.in);
+	public Account loggedIn;
+	public Account tryingToLogIn;
+	private String userNameRead;
+	private String passwordRead;
+	private Feedback userFeedback;
+	private Scanner userInput = new Scanner(System.in);
 
-	public static void doLogin() {
+	public void doLogin() {
 		// check user and password for a total of MAX tries
 		userFeedback = new Feedback();
 
@@ -29,41 +29,41 @@ public class Login {
 				System.out.print("Password: ");
 				passwordRead = userInput.next();
 			} else {
-				userFeedback.feedbackToUser(Feedback.COD_USER);
+				userFeedback.feedbackToUser(Feedback.CODE_USER);
 				continue;
 			}
 
 			String result = checkPassword(passwordRead);
 			userFeedback.feedbackToUser(result);
-			if(result.equals(Feedback.COD_FROZEN)){
+			if(result.equals(Feedback.CODE_FROZEN)){
 				return;
 			}
 
-			if (Feedback.COD_SUCCESS.equals(result)) {
+			if (Feedback.CODE_SUCCESS.equals(result)) {
 				loggedIn = checkIfUserExists(userNameRead);
 				AtmMain.isUserLoggedIn = true;
 				return;
 			}
 		}
 		// freeze account after the number of tries was exceeded
-		AccountService.freezeAccount(checkIfUserExists(userNameRead));
-		userFeedback.feedbackToUser(Feedback.COD_FREEZE);
+		new AccountService().freezeAccount(checkIfUserExists(userNameRead));
+		userFeedback.feedbackToUser(Feedback.CODE_FREEZE);
 	}
 
-	public static String checkPassword(String passWord) {
+	public String checkPassword(String passWord) {
 		if (passWord.equals(tryingToLogIn.getPassword())) {
 			if (tryingToLogIn.isActiveAccount() == false) {
-				return Feedback.COD_FROZEN;
+				return Feedback.CODE_FROZEN;
 			} else {
 
-				return Feedback.COD_SUCCESS;
+				return Feedback.CODE_SUCCESS;
 			}
 		} else {
-			return Feedback.COD_PASS;
+			return Feedback.CODE_PASS;
 		}
 	}
 
-	public static Account checkIfUserExists(String userName) {
+	public Account checkIfUserExists(String userName) {
 		for (Account account : Database.accounts) {
 			if (userName.equalsIgnoreCase(account.getName())) {
 				return account;
@@ -72,7 +72,7 @@ public class Login {
 		return null;
 	}
 
-	public static boolean isPasswordFormatValid(String password) {
+	public boolean isPasswordFormatValid(String password) {
 		if ((password.length() == 4)) {
 			int numberOfValidDigits = 0;
 			for (int i = 0; i < 4; i++) {

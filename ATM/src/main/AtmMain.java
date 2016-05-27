@@ -4,33 +4,38 @@ package main;
 import java.util.Scanner;
 
 public class AtmMain {
-
-	static boolean isAtmTurnedOff = false; // has the ATM been shut down?
+	
+	// has the ATM been shut down?
+	static boolean isAtmTurnedOff = false; 
 	static boolean isUserLoggedIn = false;
-	private static Scanner userInput = new Scanner(System.in);
+	private Scanner userInput = new Scanner(System.in);
+	private CommandsMenu commandsMenu = new CommandsMenu();
+	private Login localLogin = new Login();
 
 	public static void main(String[] args) {
-		
+		new AtmMain().startAtm();
+	}
+
+	public void startAtm() {
 		Database.createUsersAtStartup();
-		
+
 		while (!isAtmTurnedOff) {
-			Login.doLogin();
+			localLogin.doLogin();
 			runAtmCommands();
 		}
 	}
 
-
 	// run ATM menu
-	public static void runAtmCommands() {
+	public void runAtmCommands() {
 		if (isUserLoggedIn) {
 			String nextCommand = "N";
 			do {
-				if(Login.loggedIn.getAccountType().equals("admin")){
-					CommandsMenu.displayAdminMenu();
-					CommandsMenu.optionsMenuAdmin();
-				} else{
-					CommandsMenu.displayUserMenu();
-					CommandsMenu.optionsMenuUser();
+				if (localLogin.loggedIn.getAccountType().equals("admin")) {
+					commandsMenu.displayAdminMenu();
+					commandsMenu.optionsMenuAdmin();
+				} else {
+					commandsMenu.displayUserMenu();
+					commandsMenu.optionsMenuUser();
 				}
 
 				if (!isAtmTurnedOff) {

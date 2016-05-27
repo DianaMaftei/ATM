@@ -4,29 +4,30 @@ import java.util.Scanner;
 
 public class CommandsMenu {
 
-	private static Scanner userInput = new Scanner(System.in);
-	private static AccountService accountService;
-	private static String optionUser;
+	private Scanner userInput = new Scanner(System.in);
+	private AccountService accountService = new AccountService();
+	private String optionUser;
 
-	// bonus - freeze account if pass incorrect more than 3 times
-	public static void displayUserMenu() {
-		System.out.println("Choose what you want to do. Type the corresponding number: ");
-		System.out.println("\t (1) Check balance.");
-		System.out.println("\t (2) Deposit money.");
-		System.out.println("\t (3) Withdraw money.");
-		System.out.println("\t (4) Check past transactions.");
-		System.out.println("\t (5) Change password.");
+	public void displayUserMenu() {
+		System.out.println();
+		System.out.println("Choose what you want to do. Type the corresponding number: \n\n"
+				+ "\t (1) Check balance. \n"
+				+ "\t (2) Deposit money. \n"
+				+ "\t (3) Withdraw money. \n"
+				+ "\t (4) Check past transactions. \n"
+				+ "\t (5) Change password.");
 	}
 
-	public static void displayAdminMenu() {
-		System.out.println("Choose what you want to do. Type the corresponding number: ");
-		System.out.println("\t (1) Shut down machine for maintenance.");
-		System.out.println("\t (2) Add new user.");
-		System.out.println("\t (3) Make an inactive account active.");
+	public void displayAdminMenu() {
+		System.out.println();
+		System.out.println("Choose what you want to do. Type the corresponding number: \n\n"
+				+ "\t (1) Shut down machine for maintenance. \n"
+				+ "\t (2) Add new user. \n"
+				+ "\t (3) Make an inactive account active.");
 	}
 
 	// perform commands based on the user inputed option
-	public static void optionsMenuUser() {
+	public void optionsMenuUser() {
 		optionUser = userInput.next().toUpperCase();
 		switch (optionUser) {
 		case "1":
@@ -50,7 +51,7 @@ public class CommandsMenu {
 		}
 	}
 
-	public static void optionsMenuAdmin(){
+	public void optionsMenuAdmin(){
 		optionUser = userInput.next().toUpperCase();
 		switch (optionUser){
 		case "1":
