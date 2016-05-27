@@ -20,6 +20,7 @@ public class Account {
 		this.balance = 0.0;
 		this.accountType = accountType;
 		this.activeAccount = true;
+		this.transactions = new ArrayList<>();
 	}
 
 	public String getPassword() {
@@ -58,7 +59,4 @@ public class Account {
 		return transactions;
 	}
 
-	public void setTransactions(Transaction transaction) {
-		this.transactions.add(transaction);
-	}
 }
