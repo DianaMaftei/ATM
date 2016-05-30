@@ -21,7 +21,7 @@ public class Transaction {
 	
 	@Override
 	public String toString(){
-		return String.format(" Transaction Date: %s, Transaction Type: %s, Amount: %.2f, Balance: %.2f", date, transactionType, amount, balance);
+		return String.format("Date: %s - , : %s, %.2f. Balance remaining: %.2f", date, transactionType, amount, balance);
 	}
 
 }

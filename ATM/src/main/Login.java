@@ -9,8 +9,8 @@ public class Login {
 
 	static final int MAX_LOGIN_RETRIES = 3;
 
-	public Account loggedIn;
-	public Account tryingToLogIn;
+	private Account userCurrentlyLoggedIn;
+	private Account tryingToLogIn;
 	private String userNameRead;
 	private String passwordRead;
 	private Feedback userFeedback;
@@ -40,7 +40,7 @@ public class Login {
 			}
 
 			if (Feedback.CODE_SUCCESS.equals(result)) {
-				loggedIn = checkIfUserExists(userNameRead);
+				userCurrentlyLoggedIn = checkIfUserExists(userNameRead);
 				AtmMain.isUserLoggedIn = true;
 				return;
 			}
@@ -64,7 +64,7 @@ public class Login {
 	}
 
 	public Account checkIfUserExists(String userName) {
-		for (Account account : Database.accounts) {
+		for (Account account : new Database().getClientsList()) {
 			if (userName.equalsIgnoreCase(account.getName())) {
 				return account;
 			}
@@ -88,4 +88,11 @@ public class Login {
 		}
 		return false;
 	}
+
+	
+	public Account getUserCurrentlyLoggedIn() {
+		return userCurrentlyLoggedIn;
+	}
+
+	
 }

@@ -30,7 +30,7 @@ public class AtmMain {
 		if (isUserLoggedIn) {
 			String nextCommand = "N";
 			do {
-				if (localLogin.loggedIn.getAccountType().equals("admin")) {
+				if (localLogin.userCurrentlyLoggedIn.getAccountType().equals("admin")) {
 					commandsMenu.displayAdminMenu();
 					commandsMenu.optionsMenuAdmin();
 				} else {

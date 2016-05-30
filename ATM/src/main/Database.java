@@ -4,11 +4,21 @@ import java.util.ArrayList;
 
 public class Database {
 
-	public static ArrayList<Account> accounts = new ArrayList<>();
-	
-	public static void createUsersAtStartup(){
-		accounts.add(new Account("admin1", "1234", "admin"));
-		accounts.add(new Account("diana", "0000", "user"));
-		accounts.add(new Account("anca", "1111", "user"));		
+	private ArrayList<Account> clientsList = new ArrayList<>();
+	private ArrayList<Admin> adminsList = new ArrayList<>();
+
+	public Database() {
+		adminsList.add(new Admin("admin1", "1234"));
+		clientsList.add(new Account("diana", "0000"));
+		clientsList.add(new Account("anca", "1111"));
+		clientsList.add(new Account("dorian", "999"));
+	}
+
+	public ArrayList<Account> getClientsList() {
+		return clientsList;
+	}
+
+	public ArrayList<Admin> getAdminsList() {
+		return adminsList;
 	}
 }
