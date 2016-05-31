@@ -4,53 +4,53 @@ package main;
 import java.util.Scanner;
 
 public class AtmMain {
-	
+
 	// has the ATM been shut down?
-	static boolean isAtmTurnedOff = false; 
-	static boolean isUserLoggedIn = false;
-	private Scanner userInput = new Scanner(System.in);
-	private CommandsMenu commandsMenu = new CommandsMenu();
+	private static boolean isAtmTurnedOff = false;
+	private static boolean isUserLoggedIn = false;
 	private Login localLogin = new Login();
+	private static String menuSelect;
+	public static Database currentDatabase = new Database();
 
 	public static void main(String[] args) {
+		// client or admin
+		menuSelect = "client";
 		new AtmMain().startAtm();
 	}
 
 	public void startAtm() {
-		Database.createUsersAtStartup();
+		currentDatabase.initializeDatabase();
 
 		while (!isAtmTurnedOff) {
-			localLogin.doLogin();
-			runAtmCommands();
+			localLogin.doLogin(menuSelect);
+			while (isUserLoggedIn) {
+				runAtmCommands(menuSelect);
+			}
 		}
 	}
 
 	// run ATM menu
-	public void runAtmCommands() {
-		if (isUserLoggedIn) {
-			String nextCommand = "N";
-			do {
-				if (localLogin.userCurrentlyLoggedIn.getAccountType().equals("admin")) {
-					commandsMenu.displayAdminMenu();
-					commandsMenu.optionsMenuAdmin();
-				} else {
-					commandsMenu.displayUserMenu();
-					commandsMenu.optionsMenuUser();
-				}
-
-				if (!isAtmTurnedOff) {
-					do {
-						System.out.println("Do you want to continue? Type \"Y\"  for yes or \"N\" for no.");
-						nextCommand = userInput.next().toUpperCase();
-					} while (!"YN".contains(nextCommand));
-					if (nextCommand.equals("N")) {
-						System.out.println("Have a good day!");
-						isUserLoggedIn = false;
-					}
-				}
-
-			} while (nextCommand.equals("Y"));
+	public void runAtmCommands(String menuSelect) {
+		if ("admin".equals(menuSelect)) {
+			new AdminMenu().RunAdminMenu();
+		} else if ("client".equals(menuSelect)) {
+			new ClientMenu().RunClientMenu();
 		}
 	}
 
+	public static boolean isUserLoggedIn() {
+		return isUserLoggedIn;
+	}
+
+	public static void setUserLoggedIn(boolean isUserLoggedIn) {
+		AtmMain.isUserLoggedIn = isUserLoggedIn;
+	}
+
+	public static boolean isAtmTurnedOff() {
+		return isAtmTurnedOff;
+	}
+
+	public static void setAtmTurnedOff(boolean isAtmTurnedOff) {
+		AtmMain.isAtmTurnedOff = isAtmTurnedOff;
+	}
 }

@@ -2,28 +2,27 @@ package main;
 
 import java.util.ArrayList;
 
-public class Account {
+public class Client {
 	private String name;
-	private String password;
+	private String pinNo;
 	private double balance;
 	private boolean activeAccount;
 	private ArrayList<Transaction> transactionsList;
-	private Login login = new Login(); //????????????????????????????????????????
 
-	public Account(String name, String password) {
+	public Client(String name, String pinNo) {
 		this.name = name;
-		this.password = password;
+		this.pinNo = pinNo;
 		this.balance = 0.0;
 		this.activeAccount = true;
 		this.transactionsList = new ArrayList<>();
 	}
 
-	public String getPassword() {
-		return password;
+	public String pinNo() {
+		return pinNo;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void pinNo(String pinNo) {
+		this.pinNo = pinNo;
 	}
 
 	public double getBalance() {
@@ -48,7 +47,7 @@ public class Account {
 
 	public void storeUserTransactions(String typeOfTransaction, double sumTransacted, double currentBalance){
 		Transaction newTransaction = new Transaction(typeOfTransaction, sumTransacted, currentBalance);
-		login.getUserCurrentlyLoggedIn().getTransactions().add(newTransaction);  //??????????????????????????????
+		Login.currentClient.getTransactions().add(newTransaction);  
 	}
 
 	public ArrayList<Transaction> getTransactions() {

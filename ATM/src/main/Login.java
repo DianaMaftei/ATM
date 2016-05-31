@@ -3,96 +3,144 @@ package main;
 import java.util.Scanner;
 import main.Feedback;
 import main.Database;
-import main.Account;
+import main.Client;
 
 public class Login {
 
 	static final int MAX_LOGIN_RETRIES = 3;
 
-	private Account userCurrentlyLoggedIn;
-	private Account tryingToLogIn;
-	private String userNameRead;
-	private String passwordRead;
+	static Admin currentAdmin;
+	static Client currentClient;
 	private Feedback userFeedback;
 	private Scanner userInput = new Scanner(System.in);
+	private String userNameRead;
 
-	public void doLogin() {
+	public void doLogin(String typeOfUser) {
 		// check user and password for a total of MAX tries
 		userFeedback = new Feedback();
-
 		for (int i = MAX_LOGIN_RETRIES; i > 0; i--) {
-			System.out.printf("Enter your username and password! You've got %d more tries!\n", i);
-			System.out.print("Username: ");
+			userFeedback.displayMessageToUser(
+					String.format("Enter your username and password! You've got %d more tries!\n", i), "out");
+			userFeedback.displayMessageToUser("Username: ", "out");
 			userNameRead = userInput.next().toLowerCase();
-			tryingToLogIn = checkIfUserExists(userNameRead);
-			if (tryingToLogIn != null) {
-				System.out.print("Password: ");
-				passwordRead = userInput.next();
-			} else {
-				userFeedback.feedbackToUser(Feedback.CODE_USER);
-				continue;
-			}
 
-			String result = checkPassword(passwordRead);
-			userFeedback.feedbackToUser(result);
-			if(result.equals(Feedback.CODE_FROZEN)){
-				return;
-			}
+			if ("admin".equals(typeOfUser)) {
+				if (doesUserExist(userNameRead, typeOfUser)) {
+					System.out.print("Password: ");
+					String passwordRead = userInput.next();
+					if (checkAdminPassword(passwordRead)) {
+						userFeedback.displayMessageToUser("You have been successfully logged in.", "out");
+						AtmMain.setUserLoggedIn(true);
+						return;
+					} else {
+						userFeedback.displayMessageToUser("Incorrect password, please try again.", "err");
+					}
+				} else {
+					userFeedback.displayMessageToUser("Invalid user, please try again.", "err");
+				}
+			} else if ("client".equals(typeOfUser)) {
+				if (doesUserExist(userNameRead, typeOfUser)) {
+					userFeedback.displayMessageToUser("Pin: ", "out");
+					String pinRead = userInput.next();
+					if (checkClientPin(pinRead)) {
+						if (currentClient.isActiveAccount()) {
+							userFeedback.displayMessageToUser("You have been successfully logged in.", "out");
+							AtmMain.setUserLoggedIn(true);
+							return;
+						} else {
+							userFeedback.displayMessageToUser("Your account is frozen, contact your local bank.",
+									"err");
+						}
 
-			if (Feedback.CODE_SUCCESS.equals(result)) {
-				userCurrentlyLoggedIn = checkIfUserExists(userNameRead);
-				AtmMain.isUserLoggedIn = true;
-				return;
+					} else {
+						userFeedback.displayMessageToUser("Incorrect password, please try again.", "err");
+					}
+				} else {
+					userFeedback.displayMessageToUser("Invalid user, please try again.", "err");
+				}
+
 			}
 		}
+
 		// freeze account after the number of tries was exceeded
-		new AccountService().freezeAccount(checkIfUserExists(userNameRead));
-		userFeedback.feedbackToUser(Feedback.CODE_FREEZE);
-	}
+		if ("client".equals(typeOfUser)) {
+			new AccountService().freezeAccount(currentClient);
+			userFeedback.displayMessageToUser(
+					"You have reached your maximum number of tries, your account has been frozen.", "err");
 
-	public String checkPassword(String passWord) {
-		if (passWord.equals(tryingToLogIn.getPassword())) {
-			if (tryingToLogIn.isActiveAccount() == false) {
-				return Feedback.CODE_FROZEN;
-			} else {
+		} else if ("admin".equals(typeOfUser)) {
+			userFeedback.displayMessageToUser("Unlawfull access! The ATM will now shut down!", "err");
+			// TODO no admin can login for the next hour
 
-				return Feedback.CODE_SUCCESS;
-			}
-		} else {
-			return Feedback.CODE_PASS;
 		}
+		//currentClient and currentAdmin are the users currently trying to login
+		//if the login is unsuccessful, wipe the pointer to said account 
+		currentClient = null;
+		currentAdmin = null;
+
 	}
 
-	public Account checkIfUserExists(String userName) {
-		for (Account account : new Database().getClientsList()) {
+	//only needed in login
+	private boolean checkAdminPassword(String passWord) {
+		if (passWord != null && passWord.length() == currentAdmin.getPassword().length()) {
+			if (passWord.equals(currentAdmin.getPassword())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	//also needed in add user option for admin
+	private boolean checkClientPin(String pin) {
+		if (isPinFormatValid(pin)) {
+			if (pin.equals(currentClient.pinNo())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean doesUserExist(String userName, String typeOfUser) {
+		if ("admin".equals(typeOfUser)) {
+			for (Admin account : AtmMain.currentDatabase.getAdminsList()) {
+				if (userName.equalsIgnoreCase(account.getUsername())) {
+					currentAdmin = account;
+					return true;
+				}
+			}
+
+		} else if ("client".equals(typeOfUser)) {
+			Client account = getClient(userName);
+			if (account != null) {
+				currentClient = account;
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public Client getClient(String userName){
+		for (Client account : AtmMain.currentDatabase.getClientsList()) {
 			if (userName.equalsIgnoreCase(account.getName())) {
-				return account;
+				 return account;
 			}
 		}
 		return null;
 	}
 
-	public boolean isPasswordFormatValid(String password) {
-		if ((password.length() == 4)) {
+	public boolean isPinFormatValid(String pin) {
+		if ((pin.length() == 4)) {
 			int numberOfValidDigits = 0;
 			for (int i = 0; i < 4; i++) {
-				if ("0123456789".contains("" + password.charAt(i))) {
+				if ("0123456789".contains("" + pin.charAt(i))) {
 					numberOfValidDigits++;
 				}
 			}
 			if (numberOfValidDigits == 4) {
 				return true;
 			}
-		} else {
-			System.out.println("You did not type a valid password. Try again.");
 		}
 		return false;
 	}
 
-	
-	public Account getUserCurrentlyLoggedIn() {
-		return userCurrentlyLoggedIn;
-	}
-
-	
 }
