@@ -4,25 +4,25 @@ import java.util.ArrayList;
 
 public class Client {
 	private String name;
-	private String pinNo;
+	private String pinNumber;
 	private double balance;
 	private boolean activeAccount;
 	private ArrayList<Transaction> transactionsList;
 
 	public Client(String name, String pinNo) {
 		this.name = name;
-		this.pinNo = pinNo;
+		this.pinNumber = pinNo;
 		this.balance = 0.0;
 		this.activeAccount = true;
 		this.transactionsList = new ArrayList<>();
 	}
 
-	public String pinNo() {
-		return pinNo;
+	public String getPinNumber() {
+		return pinNumber;
 	}
 
-	public void pinNo(String pinNo) {
-		this.pinNo = pinNo;
+	public void setPinNumber(String pinNo) {
+		this.pinNumber = pinNo;
 	}
 
 	public double getBalance() {

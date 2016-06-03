@@ -53,7 +53,7 @@ public class Login {
 						}
 
 					} else {
-						userFeedback.displayMessageToUser("Incorrect password, please try again.", "err");
+						userFeedback.displayMessageToUser("Incorrect pin, please try again.", "err");
 					}
 				} else {
 					userFeedback.displayMessageToUser("Invalid user, please try again.", "err");
@@ -93,7 +93,7 @@ public class Login {
 	//also needed in add user option for admin
 	private boolean checkClientPin(String pin) {
 		if (isPinFormatValid(pin)) {
-			if (pin.equals(currentClient.pinNo())) {
+			if (pin.equals(currentClient.getPinNumber())) {
 				return true;
 			}
 		}

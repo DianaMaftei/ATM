@@ -15,7 +15,7 @@ public class Database {
 		adminsList.add(new Admin("admin1", "cat"));
 		clientsList.add(new Client("diana", "0000"));
 		clientsList.add(new Client("anca", "1111"));
-		clientsList.add(new Client("dorian", "999"));		
+		clientsList.add(new Client("dorian", "6666"));		
 	}
 
 	public ArrayList<Client> getClientsList() {

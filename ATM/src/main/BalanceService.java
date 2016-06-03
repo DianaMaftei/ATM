@@ -22,7 +22,7 @@ public class BalanceService {
 			double sumToWithdraw = userInput.nextDouble();
 
 			if (sumToWithdraw > 0) { // check if the sum is not negative
-				if ((Login.currentClient.getBalance() - sumToWithdraw) > 0) {
+				if ((Login.currentClient.getBalance() - sumToWithdraw) >= 0) {
 					Login.currentClient.setBalance(Login.currentClient.getBalance() - sumToWithdraw);
 					feedback.displayMessageToUser(String.format("You have withdrawn %.2f. Your current balance is %.2f.\n", sumToWithdraw,
 							Login.currentClient.getBalance()), "out");
