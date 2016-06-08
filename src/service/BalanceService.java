@@ -1,7 +1,9 @@
-package main;
+package service;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
+
+import entity.Transaction;
 
 public class BalanceService {
 	
@@ -27,7 +29,7 @@ public class BalanceService {
 					feedback.displayMessageToUser(String.format("You have withdrawn %.2f. Your current balance is %.2f.\n", sumToWithdraw,
 							Login.currentClient.getBalance()), "out");
 					// store transactions
-					Login.currentClient.storeUserTransactions("Withdrew", sumToWithdraw, Login.currentClient.getBalance());
+					Login.currentClient.storeUserTransactions(Login.currentClient, "Withdrew", sumToWithdraw, Login.currentClient.getBalance());
 
 				} else {
 					feedback.displayMessageToUser("The sum you are trying to withdraw is larger than your current balance.\n", "err");
@@ -51,7 +53,7 @@ public class BalanceService {
 				feedback.displayMessageToUser(String.format("You have deposited %.2f. Your current balance is %.2f.\n", sumToDeposit,
 						Login.currentClient.getBalance()), "out");
 				// store transactions
-				Login.currentClient.storeUserTransactions("Deposited", sumToDeposit, Login.currentClient.getBalance());
+				Login.currentClient.storeUserTransactions(Login.currentClient, "Deposited", sumToDeposit, Login.currentClient.getBalance());
 			} else {
 				feedback.displayMessageToUser("The sum you are trying to deposit is not valid. Please try again.\n", "err");
 			}

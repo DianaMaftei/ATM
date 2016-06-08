@@ -1,6 +1,9 @@
-package main;
+package service;
 
 import java.util.ArrayList;
+
+import entity.Admin;
+import entity.Client;
 
 public class Database {
 

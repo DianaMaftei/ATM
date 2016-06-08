@@ -1,9 +1,9 @@
-package main;
+package service;
 
 import java.util.Scanner;
-import main.Feedback;
-import main.Database;
-import main.Client;
+
+import entity.Admin;
+import entity.Client;
 
 public class Login {
 

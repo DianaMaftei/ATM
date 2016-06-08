@@ -1,6 +1,8 @@
-package main;
+package service;
 
 import java.util.Scanner;
+
+import entity.Client;
 
 public class AccountService {
 	

@@ -1,6 +1,8 @@
-package main;
+package service;
 
 import java.util.Scanner;
+
+import entity.Client;
 
 public class AdminService {
 
@@ -47,6 +49,7 @@ public class AdminService {
 	public void shutDownAtm() {
 		feedback.displayMessageToUser("ATM is shutting down.", "out");
 		AtmMain.setAtmTurnedOff(true);
+		AtmMain.setUserLoggedIn(false);
 
 	}
 }

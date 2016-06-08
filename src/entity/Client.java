@@ -1,4 +1,4 @@
-package main;
+package entity;
 
 import java.util.ArrayList;
 
@@ -45,9 +45,9 @@ public class Client {
 		this.activeAccount = activeAccount;
 	}
 
-	public void storeUserTransactions(String typeOfTransaction, double sumTransacted, double currentBalance){
+	public void storeUserTransactions(Client client, String typeOfTransaction, double sumTransacted, double currentBalance){
 		Transaction newTransaction = new Transaction(typeOfTransaction, sumTransacted, currentBalance);
-		Login.currentClient.getTransactions().add(newTransaction);  
+		client.getTransactions().add(newTransaction);  
 	}
 
 	public ArrayList<Transaction> getTransactions() {
