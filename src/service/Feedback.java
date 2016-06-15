@@ -2,6 +2,11 @@ package service;
 
 public class Feedback {
 	
+	//TODO rewrite - consider HashMap with keyword and string message to print
+	//eg: INCORRECT_PASS - "Incorrect password, please try again."
+	
+	//TODO move all user interaction here?
+	
 	public void displayMessageToUser(String message, String typeOfMessage){
 		if ("out".equals(typeOfMessage)){
 			System.out.println(message);

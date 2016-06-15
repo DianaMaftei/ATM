@@ -4,6 +4,8 @@ public class Admin {
 	private String username;
 	private String password;
 	
+	//TODO abstract class user?
+	
 	public Admin(String username, String password) {
 		this.username = username;
 		this.password = password;

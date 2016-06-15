@@ -45,7 +45,7 @@ public class AdminService {
 		}
 
 	}
-
+	
 	public void shutDownAtm() {
 		feedback.displayMessageToUser("ATM is shutting down.", "out");
 		AtmMain.setAtmTurnedOff(true);

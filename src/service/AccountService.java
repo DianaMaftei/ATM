@@ -10,7 +10,7 @@ public class AccountService {
 	private Login localLogin = new Login();
 	private Feedback feedback = new Feedback();
 	
-	public void changePassWord() {
+	public void changeUserPassword() {
 		feedback.displayMessageToUser("Type your current password.", "out");
 		String oldPassword = userInput.next();
 		// if current password is valid

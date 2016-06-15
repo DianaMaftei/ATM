@@ -15,6 +15,8 @@ public class Login {
 	private Scanner userInput = new Scanner(System.in);
 	private String userNameRead;
 
+	
+	//TODO find a shorter/cleaner way
 	public void doLogin(String typeOfUser) {
 		// check user and password for a total of MAX tries
 		userFeedback = new Feedback();
@@ -62,6 +64,8 @@ public class Login {
 			}
 		}
 
+		//TODO rewrite it: if someone accesses the ATM with 3 different invalid usernames in a span of 5 minutes - block atm and alert the bank
+		//TODO rewrite it: if the same account tried to access three times
 		// freeze account after the number of tries was exceeded
 		if ("client".equals(typeOfUser)) {
 			new AccountService().freezeAccount(currentClient);
@@ -89,8 +93,9 @@ public class Login {
 		}
 		return false;
 	}
-
-	//also needed in add user option for admin
+	
+	//TODO - check against feature envy
+	//also needed with add user option for admin
 	private boolean checkClientPin(String pin) {
 		if (isPinFormatValid(pin)) {
 			if (pin.equals(currentClient.getPinNumber())) {
@@ -128,6 +133,7 @@ public class Login {
 		return null;
 	}
 
+	//TODO user RegEx
 	public boolean isPinFormatValid(String pin) {
 		if ((pin.length() == 4)) {
 			int numberOfValidDigits = 0;

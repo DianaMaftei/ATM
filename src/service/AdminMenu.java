@@ -4,6 +4,8 @@ import java.util.Scanner;
 
 public class AdminMenu {
 	
+	//TODO consider polymorphism - one common menu for client and admin
+	
 	private Scanner userInput = new Scanner(System.in);
 	private AdminService adminControls = new AdminService();
 	private String optionUser;

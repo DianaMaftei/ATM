@@ -28,7 +28,7 @@ public class ClientMenu {
 			balanceManagement.getUserTransactions();
 			break;
 		case "5":
-			accountManagement.changePassWord();
+			accountManagement.changeUserPassword();
 			break;
 		case "6":
 			feedback.displayMessageToUser("Have a nice day!", "out");
