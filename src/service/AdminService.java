@@ -11,43 +11,43 @@ public class AdminService {
 	private Scanner userInput = new Scanner(System.in);
 
 	public void addNewUser() {
-		feedback.displayMessageToUser("Type a new account name:", "out");
+		feedback.displayMessageToUser("NEW_ACCOUNT_NAME");
 		String newAccountName = userInput.next();
 		if (!localLogin.doesUserExist(newAccountName, "client")) {
-			feedback.displayMessageToUser("Type a 4 digit password for the new account:", "out");
+			feedback.displayMessageToUser("NEW_PASS");
 			String newAccountPassword = userInput.next();
 			if (localLogin.isPinFormatValid(newAccountPassword)) {
 				AtmMain.currentDatabase.getClientsList().add(new Client(newAccountName, newAccountPassword));
-				feedback.displayMessageToUser("The account " + newAccountName + " has been added.", "out");
+				System.out.println("The account " + newAccountName + " has been added.");
 			}else{
-				feedback.displayMessageToUser("Incorrect password format. Try again.", "err");
+				feedback.displayMessageToUser("INCORRECT_PASS_FORMAT");
 			}
 			
 		} else {
-			feedback.displayMessageToUser("The name already exists. Please choose another one.", "err");
+			feedback.displayMessageToUser("USER_EXISTS");
 		}
 
 	}
 
 	public void reactivateAccount() {
-		feedback.displayMessageToUser("Type the name of the account you want to make active.", "out");
+		feedback.displayMessageToUser("ACTIVATE_ACCOUNT");
 		String clientNameRead = userInput.next();
 		Client accountToMakeValid = localLogin.getClient(clientNameRead);
 		if (accountToMakeValid != null) {
 			if (accountToMakeValid.isActiveAccount()) {
-				feedback.displayMessageToUser("The account is already active.", "err");
+				feedback.displayMessageToUser("ACTIVE_ACCOUNT");
 			} else {
 				accountToMakeValid.setActiveAccount(true);
-				feedback.displayMessageToUser(String.format("The account %s is now active!\n", accountToMakeValid.getName()), "out");
+				System.out.println(String.format("The account %s is now active!\n", accountToMakeValid.getName()));
 			}
 		} else {
-			feedback.displayMessageToUser("The account name is not valid.", "err");
+			feedback.displayMessageToUser("INVALID_ USER");
 		}
 
 	}
 	
 	public void shutDownAtm() {
-		feedback.displayMessageToUser("ATM is shutting down.", "out");
+		feedback.displayMessageToUser("SHUTTING_DOWN");
 		AtmMain.setAtmTurnedOff(true);
 		AtmMain.setUserLoggedIn(false);
 

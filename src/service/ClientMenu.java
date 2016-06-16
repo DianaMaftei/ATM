@@ -31,7 +31,7 @@ public class ClientMenu {
 			accountManagement.changeUserPassword();
 			break;
 		case "6":
-			feedback.displayMessageToUser("Have a nice day!", "out");
+			feedback.displayMessageToUser("GOODBYE");
 			AtmMain.setUserLoggedIn(false);			
 			break;
 		default:

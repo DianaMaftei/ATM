@@ -10,8 +10,10 @@ public class AtmMain {
 	private Login localLogin = new Login();
 	private static String menuSelect;
 	public static Database currentDatabase = new Database();
+	private static Feedback userFeedback;
 
 	public static void main(String[] args) {
+		userFeedback = new Feedback();
 		new AtmMain().startAtm();
 	}
 
@@ -21,7 +23,7 @@ public class AtmMain {
 			Scanner sc = new Scanner(System.in);
 			// clients and admins open different menus - front of ATM or inside
 			// menu, on the back
-			System.out.println("Is a *client* accessing the front menu or an *admin* accessing the back menu?");
+			userFeedback.displayMessageToUser("ACCESS");
 			menuSelect = sc.next();
 			localLogin.doLogin(menuSelect);
 			while (isUserLoggedIn) {

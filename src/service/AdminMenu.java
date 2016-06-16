@@ -26,11 +26,11 @@ public class AdminMenu {
 			adminControls.reactivateAccount();
 			break;
 		case "4":
-			feedback.displayMessageToUser("Goodbye!", "out");
+			feedback.displayMessageToUser("GOODBYE");
 			AtmMain.setUserLoggedIn(false);
 			break;
 		default:
-			System.out.println("Please type a valid command.");
+			feedback.displayMessageToUser("VALID_COMMAND");
 			break;
 		}
 	}

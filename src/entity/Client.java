@@ -2,7 +2,7 @@ package entity;
 
 import java.util.ArrayList;
 
-public class Client {
+public class Client{
 	private String name;
 	private String pinNumber;
 	private double balance;
