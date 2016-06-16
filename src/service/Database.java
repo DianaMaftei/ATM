@@ -1,9 +1,12 @@
 package service;
-
+/**
+*
+*@author diana.maftei[at]gmail.com
+*/
 import java.util.ArrayList;
 
-import entity.Admin;
-import entity.Client;
+import entities.Admin;
+import entities.Client;
 
 public class Database {
 
@@ -15,7 +18,7 @@ public class Database {
 	}
 
 	public void initializeDatabase() {
-		adminsList.add(new Admin("admin1", "cat"));
+		adminsList.add(new Admin("admin1", "adm1nPass"));
 		clientsList.add(new Client("diana", "0000"));
 		clientsList.add(new Client("anca", "1111"));
 		clientsList.add(new Client("dorian", "6666"));		

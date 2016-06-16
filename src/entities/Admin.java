@@ -1,5 +1,8 @@
-package entity;
-
+package entities;
+/**
+*
+*@author diana.maftei[at]gmail.com
+*/
 public class Admin {
 	private String username;
 	private String password;

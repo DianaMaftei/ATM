@@ -1,5 +1,8 @@
-package entity;
-
+package entities;
+/**
+*
+*@author diana.maftei[at]gmail.com
+*/
 import java.util.ArrayList;
 
 public class Client{

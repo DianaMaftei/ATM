@@ -1,20 +1,17 @@
-package service;
+package userInteraction;
 
-import java.util.Scanner;
+import service.AdminService;
+import service.AtmMain;
 
+/**
+*
+*@author diana.maftei[at]gmail.com
+*/
 public class AdminMenu {
-	
-	//TODO consider polymorphism - one common menu for client and admin
-	
-	private Scanner userInput = new Scanner(System.in);
 	private AdminService adminControls = new AdminService();
-	private String optionUser;
-	private Feedback feedback = new Feedback();
+	private UserInterface feedback = new UserInterface();
 	
-	public void RunAdminMenu() {
-		feedback.displayAdminMenu();
-		
-		optionUser = userInput.next();
+	public void runAdminMenu(String optionUser) {
 		switch (optionUser) {
 		case "1":
 			adminControls.shutDownAtm();

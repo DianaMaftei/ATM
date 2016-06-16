@@ -1,19 +1,22 @@
 package service;
-
+/**
+*
+*@author diana.maftei[at]gmail.com
+*/
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import entity.Admin;
-import entity.Client;
+import entities.Admin;
+import entities.Client;
+import userInteraction.UserInterface;
 
 public class Login {
-
 	static final int MAX_LOGIN_RETRIES = 3;
 
 	static Admin currentAdmin;
 	static Client currentClient;
-	private Feedback userFeedback;
+	private UserInterface userInterface;
 	private Scanner userInput = new Scanner(System.in);
 	private String userNameRead;
 	private Pattern pr;
@@ -22,46 +25,47 @@ public class Login {
 	// TODO find a shorter/cleaner way
 	public void doLogin(String typeOfUser) {
 		// check user and password for a total of MAX tries
-		userFeedback = new Feedback();
+		userInterface = new UserInterface();
 		for (int i = MAX_LOGIN_RETRIES; i > 0; i--) {
-			System.out.println(String.format("Enter your username and password! You've got %d more tries!\n", i));
-			userFeedback.displayMessageToUser("USERNAME");
-			userNameRead = userInput.next().toLowerCase();
-
 			if ("admin".equals(typeOfUser)) {
+				System.out.println(String.format("Enter your username and password! You've got %d more tries!\n", i));
+				userInterface.displayMessageToUser("USERNAME");
+				userNameRead = userInput.next().toLowerCase();
 				if (doesUserExist(userNameRead, typeOfUser)) {
 					System.out.print("Password: ");
 					String passwordRead = userInput.next();
 					if (checkAdminPassword(passwordRead)) {
-						userFeedback.displayMessageToUser("SUCCESS");
+						userInterface.displayMessageToUser("SUCCESS");
 						AtmMain.setUserLoggedIn(true);
 						return;
 					} else {
-						userFeedback.displayMessageToUser("INCORRECT_PASS");
+						userInterface.displayMessageToUser("INCORRECT_PASS");
 					}
 				} else {
-					userFeedback.displayMessageToUser("INVALID_USER");
+					userInterface.displayMessageToUser("INVALID_USER");
 				}
 			} else if ("client".equals(typeOfUser)) {
+				System.out.println(String.format("Enter your username and PIN number! You've got %d more tries!\n", i));
+				userInterface.displayMessageToUser("USERNAME");
+				userNameRead = userInput.next().toLowerCase();
 				if (doesUserExist(userNameRead, typeOfUser)) {
-					userFeedback.displayMessageToUser("PIN");
+					userInterface.displayMessageToUser("PIN");
 					String pinRead = userInput.next();
 					if (checkClientPin(pinRead)) {
 						if (currentClient.isActiveAccount()) {
-							userFeedback.displayMessageToUser("SUCCESS");
+							userInterface.displayMessageToUser("SUCCESS");
 							AtmMain.setUserLoggedIn(true);
 							return;
 						} else {
-							userFeedback.displayMessageToUser("FROZEN");
+							userInterface.displayMessageToUser("FROZEN");
 						}
 
 					} else {
-						userFeedback.displayMessageToUser("INCORRECT_PIN");
+						userInterface.displayMessageToUser("INCORRECT_PIN");
 					}
 				} else {
-					userFeedback.displayMessageToUser("INVALID_USER");
+					userInterface.displayMessageToUser("INVALID_USER");
 				}
-
 			}
 		}
 
@@ -71,10 +75,10 @@ public class Login {
 		// freeze account after the number of tries was exceeded
 		if ("client".equals(typeOfUser)) {
 			new AccountService().freezeAccount(currentClient);
-			userFeedback.displayMessageToUser("FREEZE");
+			userInterface.displayMessageToUser("FREEZE");
 
 		} else if ("admin".equals(typeOfUser)) {
-			userFeedback.displayMessageToUser("UNLAFUL");
+			userInterface.displayMessageToUser("UNLAFUL");
 			// TODO no admin can login for the next hour
 
 		}

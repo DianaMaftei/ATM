@@ -1,14 +1,18 @@
 package service;
-
+/**
+*
+*@author diana.maftei[at]gmail.com
+*/
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import entity.Transaction;
+import entities.Transaction;
+import userInteraction.UserInterface;
 
 public class BalanceService {
 
 	private Scanner userInput = new Scanner(System.in);
-	private Feedback feedback = new Feedback();
+	private UserInterface feedback = new UserInterface();
 
 	public void checkBalance() {
 		System.out.println(String.format("Your balance is: %.2f.\n", Login.currentClient.getBalance()));
@@ -16,7 +20,7 @@ public class BalanceService {
 
 	public void withdrawMoney() {
 		if (Login.currentClient.getBalance() <= 0.0) {
-			feedback.displayMessageToUser("NEGATIVE_BALANCE");
+			feedback.displayMessageToUser("NO_FUNDS");
 			return;
 		}
 		try {
@@ -31,7 +35,6 @@ public class BalanceService {
 					// store transactions
 					Login.currentClient.storeUserTransactions(Login.currentClient, "Withdrew", sumToWithdraw,
 							Login.currentClient.getBalance());
-
 				} else {
 					feedback.displayMessageToUser("INSUFFICIENT_FUNDS");
 				}
@@ -42,7 +45,6 @@ public class BalanceService {
 			userInput.nextLine();
 			feedback.displayMessageToUser("INVALID_AMOUNT");
 		}
-
 	}
 
 	public void depositMoney() {
@@ -63,12 +65,11 @@ public class BalanceService {
 			userInput.nextLine();
 			feedback.displayMessageToUser("INVALID_AMOUNT");
 		}
-
 	}
 
 	public void getUserTransactions() {
-		for (Transaction trans : Login.currentClient.getTransactions()) {
-			System.out.println(trans.toString());
+		for (Transaction userTransaction : Login.currentClient.getTransactions()) {
+			System.out.println(userTransaction.toString());
 		}
 	}
 

@@ -1,37 +1,39 @@
 package service;
-
+/**
+*
+*@author diana.maftei[at]gmail.com
+*/
 import java.util.Scanner;
 
-import entity.Client;
+import entities.Client;
+import userInteraction.UserInterface;
 
 public class AccountService {
 	
 	private Scanner userInput = new Scanner(System.in);
 	private Login localLogin = new Login();
-	private Feedback feedback = new Feedback();
+	private UserInterface feedback = new UserInterface();
 	
-	public void changeUserPassword() {
-		feedback.displayMessageToUser("CURRENT_PASS");
+	public void changeUserPin() {
+		feedback.displayMessageToUser("CURRENT_PIN");
 		String oldPassword = userInput.next();
-		// if current password is valid
 		if (oldPassword.equals(Login.currentClient.getPinNumber())) {
-			// make valid only 4 digit pass
-			feedback.displayMessageToUser("NEW_PASS");
+			feedback.displayMessageToUser("NEW_PIN");
 			String newPassword1 = userInput.next();
 			if (localLogin.isPinFormatValid(newPassword1)) {
-				feedback.displayMessageToUser("RE_NEW_PASS");
+				feedback.displayMessageToUser("RE_NEW_PIN");
 				String newPassword2 = userInput.next();
 				if (newPassword1.equals(newPassword2)) {
 					Login.currentClient.setPinNumber((newPassword2));
-					feedback.displayMessageToUser("SAVED_PASS");
+					feedback.displayMessageToUser("SAVED_PIN");
 				} else {
-					feedback.displayMessageToUser("NO_MATCH_PASS");
+					feedback.displayMessageToUser("NO_MATCH_PIN");
 				}
 			} else {
-				feedback.displayMessageToUser("INCORRECT_PASS");
+				feedback.displayMessageToUser("INCORRECT_PIN");
 			}
 		} else {
-			feedback.displayMessageToUser("INCORRECT_PASS");
+			feedback.displayMessageToUser("INCORRECT_PIN");
 		}
 	}
 	
